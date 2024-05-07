@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Raspberry Pi EMS w/ Bot AI</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">EMS w/ Bot AI</a>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-dark btn-outline-light" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Core</div>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Layouts
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
+                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Pages
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                                        Authentication
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="login.html">Login</a>
+                                            <a class="nav-link" href="register.html">Register</a>
+                                            <a class="nav-link" href="password.html">Forgot Password</a>
+                                        </nav>
+                                    </div>
+                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                                        Error
+                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                            <a class="nav-link" href="401.html">401 Page</a>
+                                            <a class="nav-link" href="404.html">404 Page</a>
+                                            <a class="nav-link" href="500.html">500 Page</a>
+                                        </nav>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div class="sb-sidenav-menu-heading">Addons</div>
+                            <a class="nav-link" href="charts.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Charts
+                            </a>
+                            <a class="nav-link" href="tables.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                                Tables
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        User
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                            <h1 class="mt-4">Dashboard</h1>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        </div>
+
+                        <div class="container-fluid px-0">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                <h2 class="mt-3">Outlet 1</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-2">
+                                                    <strong>Voltage</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="voltageValue_1">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">V</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">
+                                                    <strong>Current</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="currentValue_1">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-2">
+                                                    <strong>Power</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="powerValue_1">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">W</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>Watt/Second</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="wattValue_1">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">W/S</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>kw/Hour</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="kwhValue_1">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">KW/HR</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>TOTAL ENERGY</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalValue_1">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">kWh</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid px-0">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                <h2 class="mt-3">Outlet 2</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-2">
+                                                    <strong>Voltage</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="voltageValue_2">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">V</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">
+                                                    <strong>Current</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="currentValue_2">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-2">
+                                                    <strong>Power</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="powerValue_2">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">W</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>Watt/Second</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="wattValue_2">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">W/S</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>kw/Hour</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="kwhValue_2">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">KW/HR</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>TOTAL ENERGY</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalValue_2">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">kWh</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid px-0">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                <h2 class="mt-3">Outlet 3</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-2">
+                                                    <strong>Voltage</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="voltageValue_3">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">V</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">
+                                                    <strong>Current</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="currentValue_3">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-2">
+                                                    <strong>Power</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="powerValue_3">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">W</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>Watt/Second</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="wattValue_3">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">W/S</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>kw/Hour</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="kwhValue_3">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">KW/HR</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>TOTAL ENERGY</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalValue_3">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">kWh</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid px-0">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                <h2 class="mt-3">Outlet 4</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-2">
+                                                    <strong>Voltage</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="voltageValue_4">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">V</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">
+                                                    <strong>Current</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="currentValue_4">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-2">
+                                                    <strong>Power</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="powerValue_4">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">W</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>Watt/Second</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="wattValue_4">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">W/S</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>kw/Hour</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="kwhValue_4">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">KW/HR</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
+                                                    <strong>TOTAL ENERGY</strong></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalValue_4">
+                                                    Loading...</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span class="custom-icon text-gray-300">kWh</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container-fluid px-0">
+                                <div class="row">
+                                    <div class="col-xl-3 col-md-6 mb-4 mt-4 ms-2">
+                                        <div class="card border-left-primary shadow h-100">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                                            <h2>Consumption Cost</h2>
+                                                        </div>
+                                                        <input type="number" step="0.01" class="form-control" id="ratePerKWhInput" placeholder="Enter rate per kWh (e.g., 0.00)">
+                                                        <div class="text-xs font-weight-bold text-dark text-uppercase mt-3 mb-2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-3">
+                                                        <h4>Outlet 1</h4>
+                                                    </div>
+                                                    <div class="text-xs text-dark text-uppercase mt-4 mb-2">
+                                                        <h5>Total Cost: <span id="resultDisplay_1" style="font-weight: bold;">0.00</span></p></h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-3">
+                                                        <h4>Outlet 2</h4>
+                                                    </div>
+                                                    <div class="text-xs text-dark text-uppercase mt-4 mb-2">
+                                                        <h5>Total Cost: <span id="resultDisplay_2" style="font-weight: bold;">0.00</span></p></h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-3">
+                                                        <h4>Outlet 3</h4>
+                                                    </div>
+                                                    <div class="text-xs text-dark text-uppercase mt-4 mb-2">
+                                                        <h5>Total Cost: <span id="resultDisplay_3" style="font-weight: bold;">0.00</span></p></h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-3">
+                                                        <h4>Outlet 4</h4>
+                                                    </div>
+                                                    <div class="text-xs text-dark text-uppercase mt-4 mb-2">
+                                                        <h5>Total Cost: <span id="resultDisplay_4" style="font-weight: bold;">0.00</span></p></h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4 mt-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-2"></i>
+                                        Area Chart: Outlet 1
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="dropdown mb-4">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Type
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><a class="dropdown-item" href="#" data-type="year1" data-label="Total kWh consumption">Year</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="month1" data-label="Total kWh consumption">Month</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="current-week1" data-label="Total kWh consumption">Week</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="day1" data-label="Total kWh consumption">Day</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="hours1" data-label="Total kWh consumption">Hours</a></li>
+                                            </ul>
+                                        </div>
+                                        <canvas id="myAreaChart1" width="100%" height="40"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="card mb-4 mt-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-2"></i>
+                                        Area Chart: Outlet 2
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="dropdown mb-4">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Type
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><a class="dropdown-item" href="#" data-type="year2" data-label="Total kWh consumption">Year</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="month2" data-label="Total kWh consumption">Month</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="current-week2" data-label="Total kWh consumption">Week</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="day2" data-label="Total kWh consumption">Day</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="hours2" data-label="Total kWh consumption">Hours</a></li>
+                                            </ul>
+                                        </div>
+                                        <canvas id="myAreaChart2" width="100%" height="40"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="card mb-4 mt-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-2"></i>
+                                        Area Chart: Outlet 3
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="dropdown mb-4">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Type
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><a class="dropdown-item" href="#" data-type="year3" data-label="Total kWh consumption">Year</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="month3" data-label="Total kWh consumption">Month</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="current-week3" data-label="Total kWh consumption">Week</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="day3" data-label="Total kWh consumption">Day</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="hours3" data-label="Total kWh consumption">Hours</a></li>
+                                            </ul>
+                                        </div>
+                                        <canvas id="myAreaChart3" width="100%" height="40"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-6">
+                                <div class="card mb-4 mt-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-2"></i>
+                                        Area Chart: Outlet 4
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="dropdown mb-4">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Type
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><a class="dropdown-item" href="#" data-type="year4" data-label="Total kWh consumption">Year</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="month4" data-label="Total kWh consumption">Month</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="current-week4" data-label="Total kWh consumption">Week</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="day4" data-label="Total kWh consumption">Day</a></li>
+                                                <li><a class="dropdown-item" href="#" data-type="hours4" data-label="Total kWh consumption">Hours</a></li>
+                                            </ul>
+                                        </div>
+                                        <canvas id="myAreaChart4" width="100%" height="40"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid px-4">
+                        <div class="container-fluid px-0">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                <h2 class="mt-3">Relay Switches</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-1">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 mb-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase">
+                                                    <h5>Relay outlet 1</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <label class="switch">
+                                                        <input type="checkbox" onchange="toggleRelay(1, this.checked)">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-1">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 mb-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase">
+                                                    <h5>Relay outlet 2</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <label class="switch">
+                                                        <input type="checkbox" onchange="toggleRelay(2, this.checked)">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-1">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 mb-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase">
+                                                    <h5>Relay outlet 3</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <label class="switch">
+                                                        <input type="checkbox" onchange="toggleRelay(3, this.checked)">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-1">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2 mb-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase">
+                                                    <h5>Relay outlet 4</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <label class="switch">
+                                                        <input type="checkbox" onchange="toggleRelay(4, this.checked)">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; EMS w/ Bot AI 2024</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="api.js"></script>
+        <script src="chart_1.js"></script>
+        <script src="chart_2.js"></script>
+        <script src="chart_3.js"></script>
+        <script src="chart_4.js"></script>
+
+    </body>
+</html>

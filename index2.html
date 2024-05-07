@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relay Control</title>
+    <script>
+        // Establish WebSocket connection to the Raspberry Pi script
+        var socket = new WebSocket('ws://192.168.1.116:8000');
+
+        // Function to send message to Raspberry Pi when button is clicked
+        function sendCommand(relayIndex, action) {
+            socket.send(relayIndex + '_' + action); // Send command to Raspberry Pi
+        }
+    </script>
+</head>
+<body>
+    <button onclick="sendCommand(1, 'on')">Turn On Relay 1</button>
+    <button onclick="sendCommand(1, 'off')">Turn Off Relay 1</button>
+    <br>
+    <button onclick="sendCommand(2, 'on')">Turn On Relay 2</button>
+    <button onclick="sendCommand(2, 'off')">Turn Off Relay 2</button>
+    <br>
+    <button onclick="sendCommand(3, 'on')">Turn On Relay 3</button>
+    <button onclick="sendCommand(3, 'off')">Turn Off Relay 3</button>
+    <br>
+    <button onclick="sendCommand(4, 'on')">Turn On Relay 4</button>
+    <button onclick="sendCommand(4, 'off')">Turn Off Relay 4</button>
+</body>
+</html>
