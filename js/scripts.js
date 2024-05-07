@@ -57,3 +57,12 @@ rateInput.addEventListener('input', function() {
         });
     }
 });
+
+var socket = new WebSocket('ws://192.168.1.116:8000');
+
+        // Function to send toggle command to Raspberry Pi
+        function toggleRelay(relayIndex, isChecked) {
+            var action = isChecked ? 'on' : 'off';
+            var message = relayIndex + '_' + action;
+            socket.send(message);
+        }

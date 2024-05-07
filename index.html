@@ -604,7 +604,7 @@
                                                         <h4>Outlet 1</h4>
                                                     </div>
                                                     <div class="text-xs text-dark text-uppercase mt-4 mb-2">
-                                                        <h4>Total Cost: <span id="resultDisplay_1" style="font-weight: bold;">0.00</span></p></h4>
+                                                        <h5>Total Cost: <span id="resultDisplay_1" style="font-weight: bold;">0.00</span></p></h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -620,7 +620,7 @@
                                                         <h4>Outlet 2</h4>
                                                     </div>
                                                     <div class="text-xs text-dark text-uppercase mt-4 mb-2">
-                                                        <h4>Total Cost: <span id="resultDisplay_2" style="font-weight: bold;">0.00</span></p></h4>
+                                                        <h5>Total Cost: <span id="resultDisplay_2" style="font-weight: bold;">0.00</span></p></h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -636,7 +636,7 @@
                                                         <h4>Outlet 3</h4>
                                                     </div>
                                                     <div class="text-xs text-dark text-uppercase mt-4 mb-2">
-                                                        <h4>Total Cost: <span id="resultDisplay_3" style="font-weight: bold;">0.00</span></p></h4>
+                                                        <h5>Total Cost: <span id="resultDisplay_3" style="font-weight: bold;">0.00</span></p></h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -652,7 +652,7 @@
                                                         <h4>Outlet 4</h4>
                                                     </div>
                                                     <div class="text-xs text-dark text-uppercase mt-4 mb-2">
-                                                        <h4>Total Cost: <span id="resultDisplay_4" style="font-weight: bold;">0.00</span></p></h4>
+                                                        <h5>Total Cost: <span id="resultDisplay_4" style="font-weight: bold;">0.00</span></p></h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -764,112 +764,81 @@
                     <div class="container-fluid px-4">
                         <div class="container-fluid px-0">
                             <div class="d-sm-flex align-items-center justify-content-between mb-2">
-                                <h2 class="mt-3">Outlet 3</h1>
+                                <h2 class="mt-3">Relay Switches</h1>
                             </div>
                         </div>
                         <div class="row">
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-1">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-2">
-                                                    <strong>Voltage</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="voltageValue_3">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">V</span>
+                                            <div class="col mr-2 mb-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase">
+                                                    <h5>Relay outlet 1</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <label class="switch">
+                                                        <input type="checkbox" onchange="toggleRelay(4, this.checked)">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-success shadow h-100 py-2">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-1">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">
-                                                    <strong>Current</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="currentValue_3">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">A</span>
+                                            <div class="col mr-2 mb-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase">
+                                                    <h5>Relay outlet 2</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <label class="switch">
+                                                        <input type="checkbox" onchange="toggleRelay(3, this.checked)">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-success shadow h-100 py-2">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-1">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-2">
-                                                    <strong>Power</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="powerValue_3">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">W</span>
+                                            <div class="col mr-2 mb-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase">
+                                                    <h5>Relay outlet 3</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <label class="switch">
+                                                        <input type="checkbox" onchange="toggleRelay(2, this.checked)">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-success shadow h-100 py-2">
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-1">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
-                                                    <strong>Watt/Second</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="wattValue_3">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">W/S</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-success shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
-                                                    <strong>kw/Hour</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="kwhValue_3">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">KW/HR</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-success shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-2">
-                                                    <strong>TOTAL ENERGY</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalValue_3">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">kWh</span>
+                                            <div class="col mr-2 mb-2">
+                                                <div class="text-xs font-weight-bold text-dark text-uppercase">
+                                                    <h5>Relay outlet 4</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <label class="switch">
+                                                        <input type="checkbox" onchange="toggleRelay(1, this.checked)">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
