@@ -58,7 +58,23 @@ rateInput.addEventListener('input', function() {
     }
 });
 
-var socket = new WebSocket('ws://emsbot.me:8000');
+const socket = new WebSocket('wss://emsbot.me:8000');
+
+socket.addEventListener('open', function (event) {
+  console.log('WebSocket connection opened:', event);
+});
+
+socket.addEventListener('message', function (event) {
+  console.log('Received data:', event.data);
+});
+
+socket.addEventListener('close', function (event) {
+  console.log('WebSocket connection closed:', event);
+});
+
+socket.addEventListener('error', function (error) {
+  console.error('WebSocket error:', error);
+});
 
         // Function to send toggle command to Raspberry Pi
         function toggleRelay(relayIndex, isChecked) {
