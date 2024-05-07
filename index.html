@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - SB Admin</title>
+        <title>Raspberry Pi EMS w/ Bot AI</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -662,161 +662,6 @@
                             </div>
                         </div>
 
-                        <div class="container-fluid px-0">
-                            <div class="d-sm-flex align-items-center justify-content-between mb-2">
-                                <h2 class="mt-3">Energy Summarizer</h1>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-2">
-                                                    <strong>Total Energy of Outlet 1</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-primary text-gray-800" id="totalValue_1">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">KWH</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                               <!-- Earnings (Monthly) Card Example -->
-                               <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-2">
-                                                    <strong>Total Energy of Outlet 2</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-primary text-gray-800" id="totalValue_2">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">KWH</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                                <!-- Earnings (Monthly) Card Example -->
-                                 <div class="col-xl-2 col-md-6 mb-4">
-                                    <div class="card border-left-primary shadow h-100 py-2">
-                                        <div class="card-body">
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-uppercase mb-2">
-                                                        <strong>Total Energy of Outlet 3</strong></div>
-                                                    <div class="h5 mb-0 font-weight-bold text-primary text-gray-800" id="totalValue_3">
-                                                        Loading...</div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <span class="custom-icon text-gray-300">KWH</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                     <!-- Earnings (Monthly) Card Example -->
-                               <div class="col-xl-2 col-md-6 mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-uppercase mb-2">
-                                                    <strong>Total Energy of Outlet 4</strong></div>
-                                                <div class="h5 mb-0 font-weight-bold text-primary text-gray-800" id="totalValue_4">
-                                                    Loading...</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <span class="custom-icon text-gray-300">KWH</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                                  <!-- Earnings (Monthly) Card Example -->
-                                  <div class="col-xl-2 col-md-6 mb-4">
-                                    <div class="card border-left-primary shadow h-100 py-2">
-                                        <div class="card-body">
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-uppercase mb-2">
-                                                        <strong>Total Energy of All Outlet</strong></div>
-                                                    <div class="h5 mb-0 font-weight-bold text-primary text-gray-800" id="totalSumValue">
-                                                        Calculating...</div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <span class="custom-icon text-gray-300">KWH</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Earnings (Monthly) Card Example -->
-                                <div class="col-xl-2 col-md-6 mb-4">
-                                    <div class="card border-left-primary shadow h-100 py-2">
-                                        <div class="card-body">
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-uppercase mb-2">
-                                                        <strong>Total Electricity Rate</strong></div>
-                                                    <div class="h5 mb-0 font-weight-bold text-primary text-gray-800" id="totalValuePeso">
-                                                        Calculating...</div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <span class="custom-icon text-gray-300">PESO</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- KWH to Peso Converter -->
-                                <div class="container-fluid px-0">
-                                    <div class="d-sm-flex align-items-center justify-content-between mb-2">
-                                        <h2 class="mt-3">KWH to Peso Converter</h2>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6 col-md-12 mb-4">
-                                        <div class="card border-left-primary shadow h-100 py-2">
-                                            <div class="card-body d-flex align-items-center justify-content-between">
-                                                <div class="col-6">
-                                                    <div class="form-group">
-                                                        <input type="number" class="form-control" id="kwhInput" placeholder="Enter KWH">
-                                                    </div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <button class="btn btn-primary align-self-center" onclick="convertKWHtoPeso()">Convert</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Display result -->
-                                    <div class="col-xl-6 col-md-12 mb-4">
-                                        <div class="card border-left-primary shadow h-100 py-2">
-                                            <div class="card-body">
-                                                <div class="row no-gutters align-items-center">
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <label for="pesoResult">Result (in Peso):</label>
-                                                            <input type="text" class="form-control" id="pesoResult" readonly>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                     
-
-
                         <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4 mt-4">
@@ -1057,9 +902,6 @@
         <script src="chart_2.js"></script>
         <script src="chart_3.js"></script>
         <script src="chart_4.js"></script>
-        <script src="calculation.js"></script>
 
     </body>
 </html>
-
-
