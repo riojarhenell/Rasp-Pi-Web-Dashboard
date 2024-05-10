@@ -58,11 +58,38 @@ rateInput.addEventListener('input', function() {
     }
 });
 
-var socket = new WebSocket('wss://0.tcp.ap.ngrok.io:11627');
+// Function to send toggle command to Raspberry Pi
+function toggleRelay(relayIndex, isChecked) {
+    var action = isChecked ? 'on' : 'off';
+    var message = relayIndex + '_' + action;
+    sendCommand(message); // Corrected from 'command' to 'message'
+}
 
-        // Function to send toggle command to Raspberry Pi
-        function toggleRelay(relayIndex, isChecked) {
-            var action = isChecked ? 'on' : 'off';
-            var message = relayIndex + '_' + action;
-            socket.send(message);
+function sendCommand(command) {
+    var clientId = "web_" + parseInt(Math.random() * 100, 10);
+    var mqttClient = new Paho.MQTT.Client("b27bec4b3b9742fcb4c22ea1c1262d7c.s1.eu.hivemq.cloud", 8884, clientId);
+
+    mqttClient.onConnectionLost = function (responseObject) {
+        if (responseObject.errorCode !== 0) {
+            console.log("Connection lost:", responseObject.errorMessage);
         }
+    };
+
+    var options = {
+        useSSL: true,
+        userName: 'emsbot', // Replace with your MQTT username
+        password: 'Rioja@12345', // Replace with your MQTT password
+        onSuccess: function() {
+            console.log("Connected to MQTT broker");
+            var message = new Paho.MQTT.Message(command);
+            message.destinationName = "raspberrypi/relay";
+            mqttClient.send(message);
+            mqttClient.disconnect();
+        },
+        onFailure: function(error) {
+            console.error("Failed to connect to MQTT broker:", error.errorMessage);
+        }
+    };
+
+    mqttClient.connect(options);
+}

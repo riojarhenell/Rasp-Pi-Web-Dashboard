@@ -10,7 +10,7 @@ from RPLCD.i2c import CharLCD
 import asyncio
 import websockets
 import threading
-
+import paho.mqtt.client as mqtt
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
@@ -24,38 +24,99 @@ SHEET_NAMES = ['Outlet 1', 'Outlet 2', 'Outlet 3', 'Outlet 4']
 relay_pins = [16, 18, 22, 24]
 
 def relay():
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setwarnings(False)
-    for pin in relay_pins:
-        GPIO.setup(pin, GPIO.OUT)
+    # Initialize GPIO
+    def initialize_gpio():
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BOARD)
+        for pin in relay_pins:
+            GPIO.setup(pin, GPIO.OUT)
+            GPIO.output(pin, GPIO.HIGH)  # Ensure all relays are initially off
 
-    # Ensure all relays are initially off
-    for pin in relay_pins:
+    # GPIO control functions
+    def turn_relay_on(pin):
+        GPIO.output(pin, GPIO.LOW)
+
+    def turn_relay_off(pin):
         GPIO.output(pin, GPIO.HIGH)
 
+    # MQTT Callbacks
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            print("Connected to MQTT broker")
+            client.subscribe(mqtt_topic)
+        else:
+            print(f"Connection to MQTT broker failed with result code {rc}")
+
+    def on_message(client, userdata, message):
+        payload = message.payload.decode()
+        print(f"Received message on topic {message.topic}: {payload}")
+        try:
+            relay_index, action = payload.split('_')  # Command format: relayIndex_action (e.g., 1_on)
+            relay_index = int(relay_index) - 1  # Adjust relay index
+            if relay_index < 0 or relay_index >= len(relay_pins):
+                raise ValueError("Invalid relay index")
+            pin = relay_pins[relay_index]
+            if action == 'on':
+                turn_relay_on(pin)
+            elif action == 'off':
+                turn_relay_off(pin)
+            else:
+                print("Invalid action")
+        except ValueError as e:
+            print(f"Error: {e}")
+
+    # MQTT Settings
+    mqtt_broker = "b27bec4b3b9742fcb4c22ea1c1262d7c.s1.eu.hivemq.cloud"
+    mqtt_port = 8883
+    mqtt_topic = "raspberrypi/relay"
+    mqtt_username = "emsbot"
+    mqtt_password = "Rioja@12345"
+
+    # Set up GPIO
+    initialize_gpio()
+
+    # Create MQTT client
+    client = mqtt.Client(client_id="", clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport="tcp")
+    client.username_pw_set(username=mqtt_username, password=mqtt_password)
+
+    # Assign callbacks
+    client.on_connect = on_connect
+    client.on_message = on_message
+
+    # Enable TLS
+    client.tls_set()
+
+    # Connect to MQTT broker
+    client.connect(mqtt_broker, mqtt_port, 60)
+
+    # Start MQTT loop
+    client.loop_start()
+
+    # Start WebSocket server
     async def handle_command(websocket, path):
         async for command in websocket:
             try:
-                relay_index, action = command.split('_') # Command format: relayIndex_action (e.g., 1_on)
+                relay_index, action = command.split('_')  # Command format: relayIndex_action (e.g., 1_on)
                 relay_index = int(relay_index) - 1  # Adjust relay index
                 if relay_index < 0 or relay_index >= len(relay_pins):
                     raise ValueError("Invalid relay index")
                 pin = relay_pins[relay_index]
                 if action == 'on':
-                    GPIO.output(pin, GPIO.LOW)
+                    turn_relay_on(pin)
                 elif action == 'off':
-                    GPIO.output(pin, GPIO.HIGH)
+                    turn_relay_off(pin)
                 else:
                     print("Invalid action")
             except ValueError as e:
                 print(f"Error: {e}")
+
+    start_server = websockets.serve(handle_command, "0.0.0.0", 8000)
 
     # Create a new event loop
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
     # Start the WebSocket server in the new event loop
-    start_server = websockets.serve(handle_command, "0.0.0.0", 8000)
     loop.run_until_complete(start_server)
     loop.run_forever()
 
