@@ -58,7 +58,7 @@ rateInput.addEventListener('input', function() {
     }
 });
 
-var socket = new WebSocket('ws:emsbot.me:8000');
+var socket = new WebSocket('wss://0.tcp.ap.ngrok.io:11627');
 
         // Function to send toggle command to Raspberry Pi
         function toggleRelay(relayIndex, isChecked) {

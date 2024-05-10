@@ -9,6 +9,7 @@ from googleapiclient.discovery import build
 from RPLCD.i2c import CharLCD
 import asyncio
 import websockets
+import threading
 
 
 # If modifying these scopes, delete the file token.json.
@@ -20,11 +21,11 @@ RANGE_NAME = 'Sheet1'
 
 SHEET_NAMES = ['Outlet 1', 'Outlet 2', 'Outlet 3', 'Outlet 4']
 
-# Define relay pins
 relay_pins = [16, 18, 22, 24]
 
 def relay():
     GPIO.setmode(GPIO.BOARD)
+    GPIO.setwarnings(False)
     for pin in relay_pins:
         GPIO.setup(pin, GPIO.OUT)
 
@@ -36,24 +37,27 @@ def relay():
         async for command in websocket:
             try:
                 relay_index, action = command.split('_') # Command format: relayIndex_action (e.g., 1_on)
-                relay_index = int(relay_index)
-                if relay_index < 1 or relay_index > len(relay_pins):
+                relay_index = int(relay_index) - 1  # Adjust relay index
+                if relay_index < 0 or relay_index >= len(relay_pins):
                     raise ValueError("Invalid relay index")
-                pin = relay_pins[relay_index - 1] # Subtract 1 because list index starts from 0
+                pin = relay_pins[relay_index]
                 if action == 'on':
                     GPIO.output(pin, GPIO.LOW)
-                    print(f"Relay {relay_index} turned ON")
                 elif action == 'off':
                     GPIO.output(pin, GPIO.HIGH)
-                    print(f"Relay {relay_index} turned OFF")
                 else:
                     print("Invalid action")
             except ValueError as e:
                 print(f"Error: {e}")
 
+    # Create a new event loop
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    # Start the WebSocket server in the new event loop
     start_server = websockets.serve(handle_command, "0.0.0.0", 8000)
-    asyncio.get_event_loop().run_until_complete(start_server)
-    asyncio.get_event_loop().run_forever()
+    loop.run_until_complete(start_server)
+    loop.run_forever()
 
 def initialize_sensor_and_master():
     sensor0 = serial.Serial(
@@ -246,9 +250,6 @@ def data_collection_and_display(sensor_data, service, lcd):
         GPIO.cleanup()
 
 def main():
-
-    relay()
-    
     sensor0, sensor1, sensor2, sensor3, master0, master1, master2, master3 = initialize_sensor_and_master()
 
     creds = service_account.Credentials.from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
@@ -270,6 +271,10 @@ def main():
     lcd.write_string(intro_message4.center(20))
     time.sleep(5)
     lcd.clear()
+    
+    relay_thread = threading.Thread(target=relay)
+    relay_thread.daemon = True  # Daemonize the thread so it automatically exits when the main program exits
+    relay_thread.start()
 
     sensor_data = [(master0, sensor0), (master1, sensor1), (master2, sensor2), (master3, sensor3)]
     data_collection_and_display(sensor_data, service, lcd)
