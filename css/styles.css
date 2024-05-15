@@ -11294,3 +11294,12 @@ background:white;
 .switch.flat input:checked + .slider {
 background:limeGreen;
 }
+
+.fixed-alert {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  width: 100%;
+}

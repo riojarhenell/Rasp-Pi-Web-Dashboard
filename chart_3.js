@@ -380,139 +380,149 @@ function getWeeksInMonth3(month3, year3) {
 // Global variable to hold month3 names
 const monthNames3 = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-// Function to get the days of the current week starting from Sunday
 function getCurrentWeekDays3() {
-const today = new Date();
-const currentMonth = today.getMonth(); // Get the current month3 (0-indexed)
-const currentYear = today.getFullYear(); // Get the current year3
-const currentDayOfMonth = today.getDate();
-const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-const firstDayOfWeek = new Date(firstDayOfMonth); // Clone the first day3 of the month3
-const dayOffset = firstDayOfWeek.getDay(); // Calculate the offset to the previous Sunday
-
-// If the current week starts off in the previous month3, adjust the starting day3
-if (dayOffset > currentDayOfMonth % 7) {
-  firstDayOfWeek.setMonth(firstDayOfWeek.getMonth());
+  const today = new Date();
+  const currentDayOfWeek = today.getDay(); // Get the current day of the week (0-Sunday, 1-Monday, ..., 6-Saturday)
+  
+  // Calculate the start of the week (Sunday)
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - currentDayOfWeek);
+  
+  // Generate the days of the week
+  const weekDays = [];
+  for (let i = 0; i < 7; i++) {
+      const day3 = new Date(startOfWeek);
+      day3.setDate(startOfWeek.getDate() + i);
+      const dayOfWeek = day3.toLocaleString('default', { weekday: 'long' }) + ', ' + getCurrentMonthName3(day3.getMonth()) + ' ' + day3.getDate() + ', ' + day3.getFullYear();
+      weekDays.push(dayOfWeek);
+  }
+  
+  return weekDays;
 }
 
-firstDayOfWeek.setDate(firstDayOfWeek.getDate() - dayOffset + 7); // Move to the first day3 of the next week
-
-const weekDays = [];
-for (let i = 0; i < 7; i++) {
-  const day3 = new Date(firstDayOfWeek);
-  day3.setDate(firstDayOfWeek.getDate() + i);
-  const dayOfWeek = day3.toLocaleString('default', { weekday: 'long' }) + ', ' + getCurrentMonthName3(day3.getMonth()) + ' ' + day3.getDate() + ', ' + day3.getFullYear();
-  weekDays.push(dayOfWeek);
-}
-
-return weekDays;
-}
-
-// Function to get the name of the current month3
+// Function to get the name of the current month
 function getCurrentMonthName3(monthIndex) {
-const monthNames3 = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-return monthNames3[monthIndex];
+  const monthNames3 = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  return monthNames3[monthIndex];
 }
 
-// Process data to get total kWh consumed for each day3 of the current week
+// Process data to get total kWh consumed for each day of the current week
 function processCurrentWeekData3(data) {
-const currentWeekData = {};
-data.forEach(row => {
-    const date = new Date(row[0]);
-    const currentMonth = new Date().getMonth();
-    if (date.getMonth() === currentMonth) {
-    const week = Math.ceil(date.getDate() / 7);
-    const key = `Week ${week}`;
-    const value = parseFloat(row[8]); // Assuming total kWh is in the ninth column (Column I)
-    if (!(key in currentWeekData) || value > currentWeekData[key]) {
-        currentWeekData[key] = value;
-    }
-    }
-});
-return currentWeekData; // Return an object with keys as week and values as highest value
+  const currentWeekData = {};
+  data.forEach(row => {
+      const date = new Date(row[0]);
+      const currentMonth = new Date().getMonth();
+      if (date.getMonth() === currentMonth) {
+          const week = Math.ceil(date.getDate() / 7);
+          const key = `Week ${week}`;
+          const value = parseFloat(row[8]); // Assuming total kWh is in the ninth column (Column I)
+          if (!(key in currentWeekData) || value > currentWeekData[key]) {
+              currentWeekData[key] = value;
+          }
+      }
+  });
+  return currentWeekData; // Return an object with keys as week and values as highest value
 }
 
 function processWeeklyData3(data) {
-const weeklyData = {};
-const today = new Date();
-const currentMonth = today.getMonth();
-const previousMonth = (currentMonth - 1 + 12) % 12; // Adjust for previous month3 (handle year3 change)
-
-data.forEach(row => {
-  const date = new Date(row[0]);
-  const month3 = date.getMonth();
+  const weeklyData = {};
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const previousMonth = (currentMonth - 1 + 12) % 12; // Adjust for previous month (handle year change)
   
-  // Check if data belongs to current or previous month3
-  if (month3 === currentMonth || month3 === previousMonth) {
-    const dayOfWeek = date.toLocaleString('default', { weekday: 'long' }) + ', ' + getCurrentMonthName3(month3) + ' ' + date.getDate() + ', ' + date.getFullYear();
-    const key = dayOfWeek;
-    const value = parseFloat(row[8]); // Assuming total kWh is in the ninth column (Column I)
-    
-    // Update or set the maximum kWh for the day3
-    if (!(key in weeklyData) || value > weeklyData[key]) {
-      weeklyData[key] = value;
-    }
-  }
-});
-
-return weeklyData; // Return an object with keys as week and values as highest value
+  data.forEach(row => {
+      const date = new Date(row[0]);
+      const month3 = date.getMonth();
+      
+      // Check if data belongs to current or previous month
+      if (month3 === currentMonth || month3 === previousMonth) {
+          const dayOfWeek = date.toLocaleString('default', { weekday: 'long' }) + ', ' + getCurrentMonthName3(month3) + ' ' + date.getDate() + ', ' + date.getFullYear();
+          const key = dayOfWeek;
+          const value = parseFloat(row[8]); // Assuming total kWh is in the ninth column (Column I)
+          
+          // Update or set the maximum kWh for the day
+          if (!(key in weeklyData) || value > weeklyData[key]) {
+              weeklyData[key] = value;
+          }
+      }
+  });
+  
+  return weeklyData; // Return an object with keys as week and values as highest value
 }
 
 // Create chart with current week days and fetched data
 async function createWeeklyDaysChart3() {
-const data = await fetchData3();
-const weekDays = getCurrentWeekDays3();
-const weeklyData = processWeeklyData3(data);
-
-// Extracting the relevant data for each day3 of the week
-const chartData = {
-    labels: weekDays,
-    datasets: [{
-    label: 'Total Energy in kWh',
-    data: weekDays.map(day3 => weeklyData[day3] || 0),
-    lineTension: 0.2,
-    backgroundColor: "rgba(54, 162, 235, 0.2)",
-    borderColor: "rgba(54, 162, 235, 1)",
-    pointRadius: 3,
-    pointBackgroundColor: "rgba(54, 162, 235, 1)",
-    pointBorderColor: "rgba(54, 162, 235, 0.8)",
-    pointHoverRadius: 5,
-    pointHoverBackgroundColor: "rgba(54, 162, 235, 1)",
-    pointHitRadius: 50,
-    pointBorderWidth: 2,
-    fill: true,
-    }]
-};
-
-const options = {
-    scales: {
-    y: {
-        beginAtZero: true,
-        title: {
-        display: true,
-        text: 'Total Energy Consumed in kWh'
-        }
-    },
-    x: {
-        title: {
-        display: true,
-        text: 'Day of the Week'
-        }
-    }
-    }
-};
-
-// Destroy existing chart instance if it exists (myChart3)
-if (myChart3) {
-    myChart3.destroy();
-}
-
-const ctx3 = document.getElementById('myAreaChart3').getContext('2d');
-myChart3 = new Chart(ctx3, {
-    type: 'line',
-    data: chartData,
-    options: options
-});
+  const data = await fetchData3();
+  const weekDays = getCurrentWeekDays3();
+  const weeklyData = processWeeklyData3(data);
+  const today = new Date();
+  
+  // Fill missing data with the previous day's data
+  const filledData = [];
+  for (let i = 0; i < weekDays.length; i++) {
+      const day = weekDays[i];
+      const dayDate = new Date(day);
+      
+      if (weeklyData[day] !== undefined) {
+          filledData[i] = weeklyData[day];
+      } else {
+          if (dayDate > today) {
+              filledData[i] = 0; // Future days get 0
+          } else {
+              filledData[i] = i > 0 ? filledData[i - 1] : 0; // Previous day's data or 0 if first day
+          }
+      }
+  }
+  
+  // Extracting the relevant data for each day of the week
+  const chartData = {
+      labels: weekDays,
+      datasets: [{
+          label: 'Total Energy in kWh',
+          data: filledData,
+          lineTension: 0.2,
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          pointRadius: 3,
+          pointBackgroundColor: "rgba(54, 162, 235, 1)",
+          pointBorderColor: "rgba(54, 162, 235, 0.8)",
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(54, 162, 235, 1)",
+          pointHitRadius: 50,
+          pointBorderWidth: 2,
+          fill: true,
+      }]
+  };
+  
+  const options = {
+      scales: {
+          y: {
+              beginAtZero: true,
+              title: {
+                  display: true,
+                  text: 'Total Energy Consumed in kWh'
+              }
+          },
+          x: {
+              title: {
+                  display: true,
+                  text: 'Day of the Week'
+              }
+          }
+      }
+  };
+  
+  // Destroy existing chart instance if it exists (myChart3)
+  if (myChart3) {
+      myChart3.destroy();
+  }
+  
+  const ctx3 = document.getElementById('myAreaChart3').getContext('2d');
+  myChart3 = new Chart(ctx3, {
+      type: 'line',
+      data: chartData,
+      options: options
+  });
 }
 
 // Function to update chart data based on selected type
@@ -536,216 +546,170 @@ switch (type) {
 }
 
 async function fetchDataForCurrentWeek3() {
-try {
-    const currentDate = new Date();
-    const year3 = currentDate.getFullYear();
-    const month3 = currentDate.getMonth() + 1;
-    const day3 = currentDate.getDate();
-    const currentDayOfWeek = currentDate.getDay();
-    const firstDayOfWeek = day3 - currentDayOfWeek;
-    const lastDayOfWeek = firstDayOfWeek + 6;
-    const startDate = `${year3}-${month3}-${firstDayOfWeek}`;
-    const endDate = `${year3}-${month3}-${lastDayOfWeek}`;
+  try {
+      const currentDate = new Date();
+      const year3 = currentDate.getFullYear();
+      const month3 = currentDate.getMonth() + 1;
+      const day3 = currentDate.getDate();
+      const currentDayOfWeek = currentDate.getDay();
+      const firstDayOfWeek = new Date(currentDate.setDate(day3 - currentDayOfWeek + (currentDayOfWeek === 0 ? -6 : 1)));
+      const lastDayOfWeek = new Date(currentDate.setDate(firstDayOfWeek.getDate() + 6));
+      const startDate = `${year3}-${month3}-${firstDayOfWeek.getDate()}`;
+      const endDate = `${year3}-${month3}-${lastDayOfWeek.getDate()}`;
 
-    const sheetName = 'Outlet 3'; // Update with your sheet name
-    const range = 'A:L'; // Update with the correct range for your data
-    const API_KEY = 'AIzaSyC0bmDWFvgwAxn2dPopgT3NmFNEbKbu0ac';
-    const SPREADSHEET_ID = '1ISIsp_qHlT_KdmBycDXPHYB-58ShEhiDVJ518xAJlGQ';
+      const sheetName = 'Outlet 3'; // Update with your sheet name
+      const range = 'A:L'; // Update with the correct range for your data
+      const API_KEY = 'AIzaSyC0bmDWFvgwAxn2dPopgT3NmFNEbKbu0ac';
+      const SPREADSHEET_ID = '1ISIsp_qHlT_KdmBycDXPHYB-58ShEhiDVJ518xAJlGQ';
 
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${sheetName}!${range}?key=${API_KEY}`;
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${sheetName}!${range}?key=${API_KEY}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log('Fetched data:', data);
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log('Fetched data:', data);
 
-    if (data.error) {
-    console.error('Google Sheets API Error:', data.error.message);
-    return null;
-    }
+      if (data.error) {
+          console.error('Google Sheets API Error:', data.error.message);
+          return null;
+      }
 
-    if (data && data.values && Array.isArray(data.values)) {
-    const filteredData = data.values.filter(row => {
-        const rowDate = new Date(row[0]);
-        return rowDate >= new Date(startDate) && rowDate <= new Date(endDate);
-    });
-    console.log('Filtered data for current week:', filteredData);
-    return filteredData;
-    } else {
-    console.error('Unexpected data format:', data);
-    return null;
-    }
-} catch (error) {
-    console.error('Error fetching or filtering data:', error);
-    return null;
+      if (data && data.values && Array.isArray(data.values)) {
+          const filteredData = data.values.filter(row => {
+              const rowDate = new Date(row[0]);
+              return rowDate >= new Date(startDate) && rowDate <= new Date(endDate);
+          });
+          console.log('Filtered data for current week:', filteredData);
+          return filteredData;
+      } else {
+          console.error('Unexpected data format:', data);
+          return null;
+      }
+  } catch (error) {
+      console.error('Error fetching or filtering data:', error);
+      return null;
+  }
 }
-}
 
-// Process data to calculate hourly total energy consumption
 function calculateHourlyTotalEnergy3(data) {
   if (!data || data.length === 0) return Array.from({ length: 24 }, () => 0); // Default to zeros if no data
 
   const hourlyTotalEnergy = Array.from({ length: 24 }, () => 0);
 
   data.forEach(row => {
-    const timeString = row[1]; // Time string in column B
-    const totalEnergy = parseFloat(row[8]); // Total energy in column C
+      const timeString = row[1]; // Time string in column B
+      const totalEnergy = parseFloat(row[8]); // Total energy in column C
 
-    if (!isNaN(totalEnergy)) {
-      const timeComponents = timeString.split(' ')[0].split(':');
-      const hour = parseInt(timeComponents[0]);
+      if (!isNaN(totalEnergy)) {
+          const timeComponents = timeString.split(' ')[0].split(':');
+          const hour = parseInt(timeComponents[0]);
 
-      if (!isNaN(hour) && hour >= 0 && hour < 24) {
-        hourlyTotalEnergy[hour] += totalEnergy;
+          if (!isNaN(hour) && hour >= 0 && hour < 24) {
+              hourlyTotalEnergy[hour] += totalEnergy;
+          }
       }
-    }
   });
 
   return hourlyTotalEnergy;
 }
 
-// Function to generate labels for hourly data from 12:00 AM to the current hour
 function generateHourlyLabels3() {
-const labels = [];
-const now = new Date();
-const currentHour = now.getHours();
+  const labels = [];
+  const now = new Date();
+  const currentHour = now.getHours();
 
-for (let i = 0; i <= currentHour; i++) {
-  const hour = i % 12 === 0 ? 12 : i % 12;
-  const period = i < 12 ? 'AM' : 'PM';
-  labels.push(`${hour}:00 ${period}`);
+  for (let i = 0; i <= currentHour; i++) {
+      const hour = i % 12 === 0 ? 12 : i % 12;
+      const period = i < 12 ? 'AM' : 'PM';
+      labels.push(`${hour}:00 ${period}`);
+  }
+
+  return labels;
 }
-
-return labels;
-}
-
-async function createHourlyChart3() {
-const data = await fetchDataForCurrentWeek3();
-const lastTotalKWh = getLastTotalKWh3(data);
-const hourlyLabels = generateHourlyLabels3();
-
-const chartData = {
-    labels: hourlyLabels,
-    datasets: [{
-    label: 'Total Energy in kWh',
-    data: lastTotalKWh,
-    lineTension: 0.2,
-    backgroundColor: "rgba(54, 162, 235, 0.2)",
-    borderColor: "rgba(54, 162, 235, 1)",
-    pointRadius: 3,
-    pointBackgroundColor: "rgba(54, 162, 235, 1)",
-    pointBorderColor: "rgba(54, 162, 235, 0.8)",
-    pointHoverRadius: 5,
-    pointHoverBackgroundColor: "rgba(54, 162, 235, 1)",
-    pointHitRadius: 10,
-    pointBorderWidth: 2,
-    fill: true
-    }]
-};
-
-const options = {
-    scales: {
-    y: {
-        beginAtZero: true,
-        title: {
-        display: true,
-        text: 'Total Energy Consumed in kWh'
-        }
-    },
-    x: {
-        title: {
-        display: true,
-        text: 'Hour of the Day'
-        }
-    }
-    }
-};
-
-const ctx3 = document.getElementById('hourlyChart').getContext('2d');
-const hourlyChart = new Chart(ctx3, {
-    type: 'line',
-    data: chartData,
-    options: options
-});
-}
-
 
 function getLastTotalKWh3(data) {
-const hourlyData = Array.from({ length: 24 }, () => 0); // Initialize hourly data array
+  const hourlyData = Array.from({ length: 24 }, () => null); // Initialize hourly data array with null
 
-// Iterate over rows to extract hourly kWh values
-data.forEach(row => {
-    const dateTimeString = `${row[0]} ${row[1]}`; // Combine date and time strings
-    const dateTime = new Date(dateTimeString); // Parse combined datetime string
-    const hourIndex = dateTime.getHours(); // Extract hour (0-23) from datetime
+  // Iterate over rows to extract hourly kWh values
+  data.forEach(row => {
+      const dateTimeString = `${row[0]} ${row[1]}`; // Combine date and time strings
+      const dateTime = new Date(dateTimeString); // Parse combined datetime string
+      const hourIndex = dateTime.getHours(); // Extract hour (0-23) from datetime
 
-    const totalKWh = parseFloat(row[8]); // Parse total kWh value from column I (index 8)
+      const totalKWh = parseFloat(row[8]); // Parse total kWh value from column I (index 8)
 
-    // Update hourlyData with the latest total kWh value for each hour
-    if (!isNaN(totalKWh) && hourIndex >= 0 && hourIndex < 24) {
-    hourlyData[hourIndex] = totalKWh; // Update the hourly data with the latest value
-    }
-});
+      // Update hourlyData with the latest total kWh value for each hour
+      if (!isNaN(totalKWh) && hourIndex >= 0 && hourIndex < 24) {
+          hourlyData[hourIndex] = totalKWh; // Update the hourly data with the latest value
+      }
+  });
 
-return hourlyData;
+  // Fill missing hours with the previous hour's value
+  for (let i = 1; i < hourlyData.length; i++) {
+      if (hourlyData[i] === null && hourlyData[i - 1] !== null) {
+          hourlyData[i] = hourlyData[i - 1];
+      }
+  }
+
+  return hourlyData.map(value => value === null ? 0 : value); // Replace any remaining nulls with 0
 }
 
 async function createHourlyChart3() {
-const data = await fetchDataForCurrentWeek3();
-const lastTotalKWh = getLastTotalKWh3(data);
-const hourlyLabels = generateHourlyLabels3();
+  const data = await fetchDataForCurrentWeek3();
+  const lastTotalKWh = getLastTotalKWh3(data);
+  const hourlyLabels = generateHourlyLabels3();
 
-const chartData = {
-    labels: hourlyLabels,
-    datasets: [
-    {
-        label: 'Total Energy in kWh',
-        data: lastTotalKWh,
-        lineTension: 0.2,
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        pointRadius: 3,
-        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-        pointBorderColor: 'rgba(54, 162, 235, 0.8)',
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(54, 162, 235, 1)',
-        pointHitRadius: 10,
-        pointBorderWidth: 2,
-        fill: true,
-    },
-    ],
-};
+  const chartData = {
+      labels: hourlyLabels,
+      datasets: [
+          {
+              label: 'Total Energy in kWh',
+              data: lastTotalKWh,
+              lineTension: 0.2,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              pointRadius: 3,
+              pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+              pointBorderColor: 'rgba(54, 162, 235, 0.8)',
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: 'rgba(54, 162, 235, 1)',
+              pointHitRadius: 10,
+              pointBorderWidth: 2,
+              fill: true,
+          },
+      ],
+  };
 
-const options = {
-    scales: {
-    y: {
-        beginAtZero: true,
-        title: {
-        display: true,
-        text: 'Total Energy Consumed in kWh',
-        },
-    },
-    x: {
-        title: {
-        display: true,
-        text: 'Today\'s Hours',
-        },
-    },
-    },
-};
+  const options = {
+      scales: {
+          y: {
+              beginAtZero: true,
+              title: {
+                  display: true,
+                  text: 'Total Energy Consumed in kWh',
+              },
+          },
+          x: {
+              title: {
+                  display: true,
+                  text: 'Today\'s Hours',
+              },
+          },
+      },
+  };
 
-// Get the canvas3 element and rendering context
-const canvas3 = document.getElementById('myAreaChart3');
-const ctx3 = canvas3.getContext('2d');
+  // Get the canvas3 element and rendering context
+  const canvas3 = document.getElementById('myAreaChart3');
+  const ctx3 = canvas3.getContext('2d');
 
-// Destroy existing chart instance if it exists
-if (myChart3) {
-    myChart3.destroy();
-}
+  // Destroy existing chart instance if it exists
+  if (myChart3) {
+      myChart3.destroy();
+  }
 
-// Create a new chart instance for the hourly chart
-myChart3 = new Chart(ctx3, {
-    type: 'line',
-    data: chartData,
-    options: options,
-});
+  // Create a new chart instance for the hourly chart
+  myChart3 = new Chart(ctx3, {
+      type: 'line',
+      data: chartData,
+      options: options,
+  });
 }

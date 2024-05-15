@@ -30,7 +30,7 @@ def relay():
         GPIO.setmode(GPIO.BOARD)
         for pin in relay_pins:
             GPIO.setup(pin, GPIO.OUT)
-            GPIO.output(pin, GPIO.HIGH)  # Ensure all relays are initially off
+            GPIO.output(pin, GPIO.LOW)  # Ensure all relays are initially off
 
     # GPIO control functions
     def turn_relay_on(pin):
@@ -204,15 +204,42 @@ def reset_energy():
 
     return True
 
-def data_collection_and_display(sensor_data, service, lcd):
+def main():
+    sensor0, sensor1, sensor2, sensor3, master0, master1, master2, master3 = initialize_sensor_and_master()
+
+    creds = service_account.Credentials.from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    service = build('sheets', 'v4', credentials=creds)
+    
+    lcd = CharLCD(i2c_expander='PCF8574', address=0x27, port=1, cols=20, rows=4, dotsize=8)
+
+    lcd.crlf()
+    intro_message1 = 'Energy Management'
+    lcd.crlf()
+    intro_message2 = 'System with BOT AI'
+    lcd.crlf()
+    intro_message3 = 'for Energy'
+    lcd.crlf()
+    intro_message4 = 'Optimization'
+    lcd.write_string(intro_message1.center(20))
+    lcd.write_string(intro_message2.center(20))
+    lcd.write_string(intro_message3.center(20))
+    lcd.write_string(intro_message4.center(20))
+    time.sleep(5)
+    lcd.clear()
+    
+    relay_thread = threading.Thread(target=relay)
+    relay_thread.daemon = True  # Daemonize the thread so it automatically exits when the main program exits
+    relay_thread.start()
+
+    sensor_data = [(master0, sensor0), (master1, sensor1), (master2, sensor2), (master3, sensor3)]
+    
     try:
         while True:
             for i, (master, sensor) in enumerate(sensor_data):
                 outlet_number = i + 1  # Add 1 to i to start from 1 instead of 0
                 data = read_sensor_data(master)
-                voltage = (data[0] / 10.0) + 1.5 # [V]
+                voltage = (data[0] / 10.0) # [V]
                 raw_current = (data[1] + (data[2] << 16)) / 1000.0 # [A]
-                current = raw_current - 0.040 if raw_current > 0.05 else 0.0 # [A]
                 power = (data[3] + (data[4] << 16)) / 10.0 # [W]
                 power_ps = power / 3600.0 # [W/S]
                 power_ph = power_ps * 3600.0 # [W/H]
@@ -231,7 +258,7 @@ def data_collection_and_display(sensor_data, service, lcd):
                     formatted_date, 
                     formatted_time,
                     round(voltage, 3),
-                    round(current, 3),
+                    round(raw_current, 3),
                     round(power, 3),
                     round(energy, 3),
                     round(power_ps, 3),
@@ -265,7 +292,7 @@ def data_collection_and_display(sensor_data, service, lcd):
                 print('')
                 print(f'Outlet {i + 1}')
                 print('Voltage [V]: ', voltage)
-                print('Current [A]: {:.3f}'.format(current))
+                print('Current [A]: {:.3f}'.format(raw_current))
                 print('Power [W]: ', power)
                 print('Energy [Wh]: ', energy)
                 print('Energy [W/S]: {:.3f}'.format(power_ps))
@@ -278,7 +305,7 @@ def data_collection_and_display(sensor_data, service, lcd):
 
                 message_outlet1 = (f'Outlet {i + 1}')
                 message_outlet1_V = 'Voltage [V]: ' + str(voltage)
-                message_outlet1_C = 'Current [A]: {:.3f}'.format(current)
+                message_outlet1_C = 'Current [A]: {:.3f}'.format(raw_current)
                 message_outlet1_P = 'Power [W]: ' + str(power)
         
                 message_outlet1_WS = 'Energy [W/S]: {:.3f}'.format(power_ps)
@@ -309,36 +336,6 @@ def data_collection_and_display(sensor_data, service, lcd):
 
     except KeyboardInterrupt:
         GPIO.cleanup()
-
-def main():
-    sensor0, sensor1, sensor2, sensor3, master0, master1, master2, master3 = initialize_sensor_and_master()
-
-    creds = service_account.Credentials.from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-    service = build('sheets', 'v4', credentials=creds)
-    
-    lcd = CharLCD(i2c_expander='PCF8574', address=0x27, port=1, cols=20, rows=4, dotsize=8)
-
-    lcd.crlf()
-    intro_message1 = 'Energy Management'
-    lcd.crlf()
-    intro_message2 = 'System with BOT AI'
-    lcd.crlf()
-    intro_message3 = 'for Energy'
-    lcd.crlf()
-    intro_message4 = 'Optimization'
-    lcd.write_string(intro_message1.center(20))
-    lcd.write_string(intro_message2.center(20))
-    lcd.write_string(intro_message3.center(20))
-    lcd.write_string(intro_message4.center(20))
-    time.sleep(5)
-    lcd.clear()
-    
-    relay_thread = threading.Thread(target=relay)
-    relay_thread.daemon = True  # Daemonize the thread so it automatically exits when the main program exits
-    relay_thread.start()
-
-    sensor_data = [(master0, sensor0), (master1, sensor1), (master2, sensor2), (master3, sensor3)]
-    data_collection_and_display(sensor_data, service, lcd)
 
 if __name__ == '__main__':
     main()
