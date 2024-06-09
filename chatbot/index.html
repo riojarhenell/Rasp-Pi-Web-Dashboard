@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Chatbot</title>
+    <style>
+        /* styles.css */
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        #chatbot-toggle {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #chatbox {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+            height: 400px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        #chatbox.hidden {
+            display: none;
+        }
+
+        #chatbox-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #chatbox-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #chatbox-input {
+            border: none;
+            padding: 10px;
+            width: calc(100% - 60px);
+            box-sizing: border-box;
+        }
+
+        #send-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="chatbot-container">
+        <button id="chatbot-toggle">Chat</button>
+        <div id="chatbox" class="hidden">
+            <div id="chatbox-header">Chat with EMSBOT</div>
+            <div id="chatbox-messages"></div>
+            <input id="chatbox-input" type="text" placeholder="Type a message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // script.js
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatbotToggle = document.getElementById('chatbot-toggle');
+            const chatbox = document.getElementById('chatbox');
+            const sendButton = document.getElementById('send-button');
+            const chatboxInput = document.getElementById('chatbox-input');
+            const chatboxMessages = document.getElementById('chatbox-messages');
+
+            chatbotToggle.addEventListener('click', () => {
+                chatbox.classList.toggle('hidden');
+            });
+
+            sendButton.addEventListener('click', sendMessage);
+            chatboxInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            async function sendMessage() {
+                const message = chatboxInput.value;
+                if (message.trim() === '') return;
+
+                appendMessage('You', message);
+                chatboxInput.value = '';
+
+                const response = await getAIResponse(message);
+                appendMessage('EMSBOT', response);
+            }
+
+            function appendMessage(sender, message) {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `${sender}: ${message}`;
+                chatboxMessages.appendChild(messageElement);
+                chatboxMessages.scrollTop = chatboxMessages.scrollHeight;
+            }
+
+            async function getAIResponse(input) {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ input }),
+                });
+                const data = await response.json();
+                return data.output;
+            }
+        });
+    </script>
+
+</body>
+</html>

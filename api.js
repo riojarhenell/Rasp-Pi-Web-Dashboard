@@ -56,10 +56,26 @@ function fetchDataForAllQueries() {
     });
 }
 
+function getMonthPeriod() {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const firstDayFormatted = firstDay.toLocaleDateString('en-US', options);
+    const lastDayFormatted = lastDay.toLocaleDateString('en-US', options);
+
+    return `${firstDayFormatted} to ${lastDayFormatted}`;
+}
+
+document.getElementById('month-period').textContent = `Month Period: ${getMonthPeriod()}`;
+
 // Call fetchDataForAllQueries initially
 fetchDataForAllQueries();
 
 // Call fetchDataForAllQueries every 60 seconds
 setInterval(fetchDataForAllQueries, 60000);
+
+
 
 console.log('API.js loaded');
