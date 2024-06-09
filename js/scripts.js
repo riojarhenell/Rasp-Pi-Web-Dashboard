@@ -35,12 +35,16 @@ const outletData = [
     { totalValueId: 'totalValue_4', resultDisplayId: 'resultDisplay_4' }
 ];
 
+const monthlyRates = [11.37, 11.95, 12.32, 11.60, 12.08];
+const averageRate = monthlyRates.reduce((sum, rate) => sum + rate, 0) / monthlyRates.length;
+
 // Function to update the multiplied value when the input changes
 rateInput.addEventListener('input', function() {
     const ratePerKWh = parseFloat(rateInput.value); // Get the entered rate per kWh as a number
     
     if (!isNaN(ratePerKWh)) {
         let totalCost = 0; // Initialize total cost
+        let predictedTotalCost = 0; // Initialize predicted total cost
         
         outletData.forEach(outlet => {
             const totalValueElement = document.getElementById(outlet.totalValueId);
@@ -50,8 +54,11 @@ rateInput.addEventListener('input', function() {
                 const totalValue = parseFloat(totalValueElement.textContent); // Get the total value as a number
                 
                 if (!isNaN(totalValue)) {
-                    const multipliedValue = ratePerKWh * totalValue; // Perform multiplication
+                    const multipliedValue = ratePerKWh * totalValue; // Perform multiplication for user-entered rate
+                    const predictedValue = averageRate * totalValue; // Perform multiplication for predicted rate
+                    
                     resultDisplay.textContent = multipliedValue.toFixed(2); // Display the multiplied value with two decimal places
+                    predictedTotalCost += predictedValue; // Add to predicted total cost
                     
                     totalCost += multipliedValue; // Add to total cost
                 } else {
@@ -65,8 +72,31 @@ rateInput.addEventListener('input', function() {
         if (totalCostDisplay) {
             totalCostDisplay.textContent = totalCost.toFixed(2);
         }
+
+        // Display predicted total cost
+        const predictedCostDisplay = document.getElementById('predictedCostDisplay');
+        if (predictedCostDisplay) {
+            predictedCostDisplay.textContent = predictedTotalCost.toFixed(2);
+        }
     }
 });
+
+// Initial calculation for predicted total cost
+let predictedTotalCost = 0;
+outletData.forEach(outlet => {
+    const totalValueElement = document.getElementById(outlet.totalValueId);
+    if (totalValueElement) {
+        const totalValue = parseFloat(totalValueElement.textContent);
+        if (!isNaN(totalValue)) {
+            const predictedValue = averageRate * totalValue;
+            predictedTotalCost += predictedValue;
+        }
+    }
+});
+const predictedCostDisplay = document.getElementById('predictedCostDisplay');
+if (predictedCostDisplay) {
+    predictedCostDisplay.textContent = predictedTotalCost.toFixed(2);
+}
 
 function applyTime(relayNumber) {
 

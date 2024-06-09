@@ -16,7 +16,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-3 ms-3 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.html">EMS w/ Bot AI</a>
             <!-- Navbar Search-->
@@ -161,8 +161,13 @@
                                                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                                                         <h7 id="month-period">Month Period</h7>
                                                     </div>
-                                                    <div class="text-xs text-dark text-uppercase mt-4 mb-2">
-                                                        <h5>Total Cost: <span id="totalCostDisplay" style="font-weight: bold;">0.00</span></p></h5>
+                                                    <div class="row text-xs text-dark text-uppercase mt-4">
+                                                        <div class="col">
+                                                            <h5>Predicted Total Cost: <span id="predictedCostDisplay" style="font-weight: bold;">0.00</span></p></h5>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h5>Total Cost: <span id="totalCostDisplay" style="font-weight: bold;">0.00</span></p></h5>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
