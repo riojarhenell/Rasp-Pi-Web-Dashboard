@@ -27,7 +27,6 @@ window.addEventListener('DOMContentLoaded', event => {
 
 const rateInput = document.getElementById('ratePerKWhInput');
 
-// Assuming each outlet has a unique ID for the total value and result display
 const outletData = [
     { totalValueId: 'totalValue_1', resultDisplayId: 'resultDisplay_1' },
     { totalValueId: 'totalValue_2', resultDisplayId: 'resultDisplay_2' },
@@ -38,65 +37,72 @@ const outletData = [
 const monthlyRates = [11.37, 11.95, 12.32, 11.60, 12.08];
 const averageRate = monthlyRates.reduce((sum, rate) => sum + rate, 0) / monthlyRates.length;
 
-// Function to update the multiplied value when the input changes
-rateInput.addEventListener('input', function() {
-    const ratePerKWh = parseFloat(rateInput.value); // Get the entered rate per kWh as a number
-    
-    if (!isNaN(ratePerKWh)) {
-        let totalCost = 0; // Initialize total cost
-        let predictedTotalCost = 0; // Initialize predicted total cost
-        
-        outletData.forEach(outlet => {
-            const totalValueElement = document.getElementById(outlet.totalValueId);
-            const resultDisplay = document.getElementById(outlet.resultDisplayId);
+// Function to update the cost display
+function updateCostDisplay() {
+    const ratePerKWh = parseFloat(rateInput.value);
+    let totalCost = 0;
+    let predictedTotalCost = 0;
 
-            if (totalValueElement && resultDisplay) {
-                const totalValue = parseFloat(totalValueElement.textContent); // Get the total value as a number
-                
-                if (!isNaN(totalValue)) {
-                    const multipliedValue = ratePerKWh * totalValue; // Perform multiplication for user-entered rate
-                    const predictedValue = averageRate * totalValue; // Perform multiplication for predicted rate
-                    
-                    resultDisplay.textContent = multipliedValue.toFixed(2); // Display the multiplied value with two decimal places
-                    predictedTotalCost += predictedValue; // Add to predicted total cost
-                    
-                    totalCost += multipliedValue; // Add to total cost
-                } else {
-                    resultDisplay.textContent = '0.00'; // Display default value if total value is invalid
-                }
+    outletData.forEach(outlet => {
+        const totalValueElement = document.getElementById(outlet.totalValueId);
+        const resultDisplay = document.getElementById(outlet.resultDisplayId);
+
+        if (totalValueElement && resultDisplay) {
+            const totalValue = parseFloat(totalValueElement.textContent);
+
+            if (!isNaN(totalValue)) {
+                const multipliedValue = ratePerKWh * totalValue;
+                const predictedValue = averageRate * totalValue;
+
+                resultDisplay.textContent = multipliedValue.toFixed(2);
+                predictedTotalCost += predictedValue;
+                totalCost += multipliedValue;
+            } else {
+                resultDisplay.textContent = '0.00';
             }
-        });
-        
-        // Display total cost
-        const totalCostDisplay = document.getElementById('totalCostDisplay');
-        if (totalCostDisplay) {
-            totalCostDisplay.textContent = totalCost.toFixed(2);
         }
+    });
 
-        // Display predicted total cost
-        const predictedCostDisplay = document.getElementById('predictedCostDisplay');
-        if (predictedCostDisplay) {
-            predictedCostDisplay.textContent = predictedTotalCost.toFixed(2);
-        }
+    const totalCostDisplay = document.getElementById('totalCostDisplay');
+    if (totalCostDisplay) {
+        totalCostDisplay.textContent = totalCost.toFixed(2);
     }
-});
+
+    const predictedCostDisplay = document.getElementById('predictedCostDisplay');
+    if (predictedCostDisplay) {
+        predictedCostDisplay.textContent = predictedTotalCost.toFixed(2);
+    }
+}
 
 // Initial calculation for predicted total cost
-let predictedTotalCost = 0;
-outletData.forEach(outlet => {
-    const totalValueElement = document.getElementById(outlet.totalValueId);
-    if (totalValueElement) {
-        const totalValue = parseFloat(totalValueElement.textContent);
-        if (!isNaN(totalValue)) {
-            const predictedValue = averageRate * totalValue;
-            predictedTotalCost += predictedValue;
+function initializePredictedCost() {
+    let predictedTotalCost = 0;
+
+    outletData.forEach(outlet => {
+        const totalValueElement = document.getElementById(outlet.totalValueId);
+        if (totalValueElement) {
+            const totalValue = parseFloat(totalValueElement.textContent);
+            if (!isNaN(totalValue)) {
+                const predictedValue = averageRate * totalValue;
+                predictedTotalCost += predictedValue;
+            }
         }
+    });
+
+    const predictedCostDisplay = document.getElementById('predictedCostDisplay');
+    if (predictedCostDisplay) {
+        predictedCostDisplay.textContent = predictedTotalCost.toFixed(2);
     }
-});
-const predictedCostDisplay = document.getElementById('predictedCostDisplay');
-if (predictedCostDisplay) {
-    predictedCostDisplay.textContent = predictedTotalCost.toFixed(2);
 }
+
+// Add event listener to rate input
+rateInput.addEventListener('input', updateCostDisplay);
+
+// Initialize predicted cost on page load
+window.addEventListener('load', () => {
+    initializePredictedCost();
+    updateCostDisplay();
+});
 
 function applyTime(relayNumber) {
 
